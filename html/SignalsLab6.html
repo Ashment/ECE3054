@@ -1,0 +1,205 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>SignalsLab6</title><meta name="generator" content="MATLAB 9.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-10-18"><meta name="DC.source" content="SignalsLab6.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">1. 3rd Order Elliptic Filter.</a></li><li><a href="#2">Zeros and Poles</a></li><li><a href="#3">2.</a></li><li><a href="#6">3.</a></li><li><a href="#8">4.</a></li></ul></div><h2 id="1">1. 3rd Order Elliptic Filter.</h2><p>We use ellip function to generate parameters for the desired third order filter</p><pre class="codeinput">dp = 0.01;
+ds = 0.01;
+Rp = -20*log10(1-dp);
+Rs = -20*log10(dp);
+[B, A] = ellip(3, Rp, Rs,0.4);
+<span class="comment">% H(z) = (0.1256 + 0.3021z^-1 + 0.3021z^-2 + 0.1256z^-3) / (1 - 0.6303z^-1 + 0.6550z^-2 - 0.1693z^-3)</span>
+
+<span class="comment">% We plot frequency response using freqz function, both in linear and dB</span>
+<span class="comment">% scale.</span>
+[H, w] = freqz(B,A);
+subplot(2,1,1), plot(w, abs(H)), title(<span class="string">'Freq. Resp. Linear'</span>);
+subplot(2,1,2), plot(w, mag2db(abs(H))), title(<span class="string">'Freq. Resp. dB'</span>);
+</pre><img vspace="5" hspace="5" src="SignalsLab6_01.png" alt=""> <h2 id="2">Zeros and Poles</h2><p>We also plot the impulse response and the poles and zeroes of the system.</p><pre class="codeinput">n = -5:15;
+hx = filter(B,A,(n==0));
+
+subplot(2,1,1), stem(hx), title(<span class="string">'Impulse Response'</span>);
+subplot(2,1,2), zplane(B,A), title(<span class="string">'Zeroes and Poles'</span>);
+</pre><img vspace="5" hspace="5" src="SignalsLab6_02.png" alt=""> <h2 id="3">2.</h2><p>Same as above, but this time using a 4th order elliptic filter.</p><pre class="codeinput">dp = 0.01;
+ds = 0.01;
+Rp = -20*log10(1-dp);
+Rs = -20*log10(dp);
+[B, A] = ellip(4, Rp, Rs,0.4);
+</pre><p>We plot frequency response using freqz function, both in linear and dB scale.</p><pre class="codeinput">[H, w] = freqz(B,A);
+subplot(2,1,1), plot(w, abs(H)), title(<span class="string">'Freq. Resp. Linear'</span>);
+subplot(2,1,2), plot(w, mag2db(abs(H))), title(<span class="string">'Freq. Resp. dB'</span>);
+</pre><img vspace="5" hspace="5" src="SignalsLab6_03.png" alt=""> <p>We also plot the impulse response and the poles and zeroes of the system.</p><pre class="codeinput">n = -5:15;
+hx = filter(B,A,(n==0));
+
+subplot(2,1,1), stem(hx), title(<span class="string">'Impulse Response'</span>);
+subplot(2,1,2), zplane(B,A), title(<span class="string">'Zeroes and Poles'</span>);
+</pre><img vspace="5" hspace="5" src="SignalsLab6_04.png" alt=""> <h2 id="6">3.</h2><p>As above, but using a 6th order elliptic filter.</p><pre class="codeinput">dp = 0.01;
+ds = 0.01;
+Rp = -20*log10(1-dp);
+Rs = -20*log10(dp);
+[B, A] = ellip(6, Rp, Rs,0.4);
+
+<span class="comment">% We plot frequency response using freqz function, both in linear and dB</span>
+<span class="comment">% scale.</span>
+[H, w] = freqz(B,A);
+subplot(2,1,1), plot(w, abs(H)), title(<span class="string">'Freq. Resp. Linear'</span>);
+subplot(2,1,2), plot(w, mag2db(abs(H))), title(<span class="string">'Freq. Resp. dB'</span>);
+</pre><img vspace="5" hspace="5" src="SignalsLab6_05.png" alt=""> <p>We also plot the impulse response and the poles and zeroes of the system.</p><pre class="codeinput">n = -5:15;
+hx = filter(B,A,(n==0));
+
+subplot(2,1,1), stem(hx), title(<span class="string">'Impulse Response'</span>);
+subplot(2,1,2), zplane(B,A), title(<span class="string">'Zeroes and Poles'</span>);
+
+<span class="comment">% Overall, we observe that increasing the order of the elliptic filter</span>
+<span class="comment">% reduces the transition window between the passband and stopband. Though</span>
+<span class="comment">% the ripples in the stopband and passband are kept the same, increasing</span>
+<span class="comment">% the order of the elliptic filter made the filter behave more closely to</span>
+<span class="comment">% an ideal filter, more quickly attenuating the signal as the frequency</span>
+<span class="comment">% passes the passband threshold.</span>
+</pre><img vspace="5" hspace="5" src="SignalsLab6_06.png" alt=""> <h2 id="8">4.</h2><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% 1. 3rd Order Elliptic Filter.
+% We use ellip function to generate parameters for the desired third order filter
+dp = 0.01; 
+ds = 0.01;
+Rp = -20*log10(1-dp);
+Rs = -20*log10(dp);
+[B, A] = ellip(3, Rp, Rs,0.4);
+% H(z) = (0.1256 + 0.3021z^-1 + 0.3021z^-2 + 0.1256z^-3) / (1 - 0.6303z^-1 + 0.6550z^-2 - 0.1693z^-3)
+
+% We plot frequency response using freqz function, both in linear and dB
+% scale.
+[H, w] = freqz(B,A);
+subplot(2,1,1), plot(w, abs(H)), title('Freq. Resp. Linear');
+subplot(2,1,2), plot(w, mag2db(abs(H))), title('Freq. Resp. dB');
+
+%% Zeros and Poles
+% We also plot the impulse response and the poles and zeroes of the system.
+n = -5:15;
+hx = filter(B,A,(n==0));
+
+subplot(2,1,1), stem(hx), title('Impulse Response');
+subplot(2,1,2), zplane(B,A), title('Zeroes and Poles');
+
+%% 2. 
+% Same as above, but this time using a 4th order elliptic filter.
+dp = 0.01; 
+ds = 0.01;
+Rp = -20*log10(1-dp);
+Rs = -20*log10(dp);
+[B, A] = ellip(4, Rp, Rs,0.4);
+
+%%
+% We plot frequency response using freqz function, both in linear and dB
+% scale.
+[H, w] = freqz(B,A);
+subplot(2,1,1), plot(w, abs(H)), title('Freq. Resp. Linear');
+subplot(2,1,2), plot(w, mag2db(abs(H))), title('Freq. Resp. dB');
+
+%% 
+% We also plot the impulse response and the poles and zeroes of the system.
+n = -5:15;
+hx = filter(B,A,(n==0));
+
+subplot(2,1,1), stem(hx), title('Impulse Response');
+subplot(2,1,2), zplane(B,A), title('Zeroes and Poles');
+
+
+%% 3.
+% As above, but using a 6th order elliptic filter.
+dp = 0.01; 
+ds = 0.01;
+Rp = -20*log10(1-dp);
+Rs = -20*log10(dp);
+[B, A] = ellip(6, Rp, Rs,0.4);
+
+% We plot frequency response using freqz function, both in linear and dB
+% scale.
+[H, w] = freqz(B,A);
+subplot(2,1,1), plot(w, abs(H)), title('Freq. Resp. Linear');
+subplot(2,1,2), plot(w, mag2db(abs(H))), title('Freq. Resp. dB');
+
+%% 
+% We also plot the impulse response and the poles and zeroes of the system.
+n = -5:15;
+hx = filter(B,A,(n==0));
+
+subplot(2,1,1), stem(hx), title('Impulse Response');
+subplot(2,1,2), zplane(B,A), title('Zeroes and Poles');
+
+% Overall, we observe that increasing the order of the elliptic filter
+% reduces the transition window between the passband and stopband. Though
+% the ripples in the stopband and passband are kept the same, increasing
+% the order of the elliptic filter made the filter behave more closely to
+% an ideal filter, more quickly attenuating the signal as the frequency
+% passes the passband threshold.
+
+%% 4.
+
+
+
+##### SOURCE END #####
+--></body></html>

@@ -6,12 +6,18 @@ A = [1,0,4,5,3,9,0,2];
 a = [4,5,0,2,0,0,7,1];
 A
 a
+[ss,sss] = size(A)
+AA = [zeros(3); ones(1,3)];
+BB = zeros(1,3);
+AA
+BB
 
 % b)
 B = [A,a];
 C = [a,A];
 B
 C
+[ss,sss] = size(C)
 
 % c)
 D = zeros(1,50);
