@@ -193,7 +193,7 @@ figure %Figure 6
 plot(y)
 soundsc(y,Fs)
 
-%% - Frequency Response of the comb filter
+%% - Frequency Response of
 
 [H,w] = freqz(b,a,2^16);
 figure %Figure 7
@@ -201,9 +201,7 @@ plot(w/pi*Fs/2, abs(H))
 soundsc(y,Fs)
 
 % The comb filter just allows evenly spaced frequencies
-% to pass while attenuating the frequencies in-between.
-% Presumably, it is called a comb filter because it looks
-% like a comb.
+% to pass while attenuating the frequencies betweenthe
 
 
 
